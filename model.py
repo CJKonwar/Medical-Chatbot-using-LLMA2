@@ -1,10 +1,10 @@
+import chainlit as cl
 from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
 from langchain.prompts import PromptTemplate
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_community.llms import CTransformers
 from langchain.chains import RetrievalQA
-import chainlit as cl
 
 DB_FAISS_PATH = 'vectorstore/db_faiss'
 
@@ -67,9 +67,9 @@ def final_result(query):
 @cl.on_chat_start
 async def start():
     chain = qa_bot()
-    msg = cl.Message(content="Starting the bot...")
+    msg = cl.Message(content="<h2>Starting the bot...</h2>")
     await msg.send()
-    msg.content = "Hi, Welcome to Medical Bot. What is your query?"
+    msg.content = "<h3>Hi, Welcome to Medical Bot designed and developed by CJ KONWAR. What is your query?</h3>"
     await msg.update()
 
     cl.user_session.set("chain", chain)
@@ -90,4 +90,5 @@ async def main(message: cl.Message):
     else:
         answer += "\nNo sources found"
 
-    await cl.Message(content=answer).send()
+    response_message = cl.Message(content=f"<h4>{answer}</h4>")
+    await response_message.send()
